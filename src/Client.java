@@ -9,7 +9,6 @@ public class Client {
     private int _serverPort;
     private InetAddress _serverAddress;
     private Socket _socket;
-    private DataInputStream _in;
     private DataOutputStream _out;
     private BufferedReader _keyboard;
     private String _name;
@@ -44,14 +43,6 @@ public class Client {
         }
     }
 
-    public void setInputStream(){
-        try {
-            this._in = new DataInputStream(this._socket.getInputStream());
-        }catch(IOException err){
-            System.out.println(err.getMessage());
-        }
-    }
-
     public void setOutputStream(){
         try {
             this._out = new DataOutputStream(this._socket.getOutputStream());
@@ -59,28 +50,25 @@ public class Client {
             System.out.println(err.getMessage());
         }
     }
-    public void set_keyboard() {
+    public void setKeyboard() {
         this._keyboard = new BufferedReader(new InputStreamReader(System.in));
     }
     public void startClient(){
         this.setSocket();
         this.setOutputStream();
-        this.setInputStream();
-        this.set_keyboard();
+        this.setKeyboard();
         System.out.println("Server address:" + this.getAddress() + " port: " + this._serverPort);
         String line = null;
         try {
             System.out.println("Type something");
+            new ClientThread(_socket);
             while (true) {
                 line = _keyboard.readLine();
                 if(line.equalsIgnoreCase("exit")){
                     break;
                 }
-                System.out.println("Sending...");
                 this._out.writeUTF(this._name + ": " + line);
                 this._out.flush();
-                line = _in.readUTF();
-                System.out.println("You: " + line);
             }
         }catch (IOException err){
             System.out.println(err.getMessage());

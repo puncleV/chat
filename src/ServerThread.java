@@ -2,6 +2,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Created by dart on 01.09.15.
@@ -10,8 +11,10 @@ public class ServerThread extends Thread{
     protected Socket _socket;
     protected DataInputStream _in;
     protected DataOutputStream _out;
-    public ServerThread( Socket socket ) {
+    private ArrayList<Socket> _socketList;
+    public ServerThread( Socket socket, ArrayList<Socket>  socketList ) {
         this._socket = socket;
+        this._socketList = socketList;
         start();
     }
     public void setInputStream(){
@@ -28,15 +31,25 @@ public class ServerThread extends Thread{
             System.out.println(err.getMessage());
         }
     }
+    public void setSocketList( ArrayList<Socket>  socketList ){
+        this._socketList = socketList;
+    }
     public void run(){
         this.setInputStream();
-        this.setOutputStream();
+        //this.setOutputStream();
         String lineFromClient;
         try {
             while ((lineFromClient = this._in.readUTF()) != null){
                 System.out.println(lineFromClient);
-                this._out.writeUTF(lineFromClient);
-                this._out.flush();
+                for (int i = 0; i < this._socketList.size(); i++){
+                    try {
+                        this._out = new DataOutputStream(this._socketList.get(i).getOutputStream());
+                        this._out.writeUTF(lineFromClient);
+                        this._out.flush();
+                    }catch(IOException err){
+                        System.out.println(err.getMessage());
+                    }
+                }
             }
         }catch(IOException err) {
             System.out.println(err.getMessage());

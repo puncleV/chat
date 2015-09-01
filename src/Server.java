@@ -1,8 +1,7 @@
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Created by dart on 01.09.15.
@@ -10,6 +9,7 @@ import java.net.Socket;
 public class Server{
     private int _port;
     private ServerSocket _sSocket;
+    private ArrayList<Socket> _socketList;
     public Server(int port) {
         setPort(port);
         setSocket();
@@ -32,11 +32,12 @@ public class Server{
         }
     }
     public void runServer( ){
+        _socketList = new ArrayList<Socket>();
         try {
             while (true) {
                 Socket socket = this._sSocket.accept();
-                System.out.println("Somebody is here...");
-                new ServerThread (socket);
+                _socketList.add(socket);
+                new ServerThread (socket, _socketList);
             }
         }catch(IOException err){
             System.out.println(err.getMessage());
