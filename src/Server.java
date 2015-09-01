@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 /**
  * Created by dart on 01.09.15.
+ * Серверная часть приложения, запускает сервер на определенном порту и считывает все подключения и хранит их списком
+ * @author punkkk
  */
 class Server{
     private int _port;

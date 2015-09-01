@@ -4,6 +4,8 @@ import java.net.Socket;
 
 /**
  * Created by dart on 01.09.15.
+ * Клиент к серверу, подключается по определенному порту, есть возможность отправлять сообщения на сервер
+ * @author punkkk
  */
 class Client {
     private int _serverPort;
@@ -64,7 +66,7 @@ class Client {
             new ClientThread(_socket);
             while (true) {
                 line = _keyboard.readLine();
-                if(line.equalsIgnoreCase("exit")){
+                if(line.equalsIgnoreCase("exit")) {
                     System.exit(0);
                 }
                 this._out.writeUTF(this._name + ": " + line);
@@ -74,9 +76,16 @@ class Client {
             System.out.println(err.getMessage());
         }
     }
+    public void argsAggregation(String[] args){
+        if(args.length >= 1){
+            this._name = args[0];
+        }else{
+            this._name = "ANONIMUS";
+        }
+    }
     public static void main(String[] args){
         Client client = new Client(1734, "127.0.0.1");
-        client.setName( args[0] );
+        client.argsAggregation(args);
         client.startClient();
     }
 }

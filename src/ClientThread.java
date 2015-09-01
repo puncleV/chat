@@ -4,6 +4,9 @@ import java.net.Socket;
 
 /**
  * Created by dart on 01.09.15.
+ * Поток для принятия отправляемых от сервера сообщений, нужен для того что бы мы в реальном времени получали сообщения
+ * других пользователей
+ * @author punkkk
  */
 class ClientThread extends Thread{
     private DataInputStream _in;

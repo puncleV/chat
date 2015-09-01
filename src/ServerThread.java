@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 /**
  * Created by dart on 01.09.15.
+ * Серверные потоки, для одновременного включения нескольких пользователей, так же обрабатывает входыне сообщения и
+ * производит их рассылку всем, подключенным пользователям
+ * @author punkkk
  */
 class ServerThread extends Thread{
     protected Socket _socket;
