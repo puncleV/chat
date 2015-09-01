@@ -7,18 +7,13 @@ import java.net.Socket;
 /**
  * Created by dart on 01.09.15.
  */
-public class Server {
+public class Server{
     private int _port;
     private ServerSocket _sSocket;
-    private Socket _socket;
-    private DataInputStream _in;
-    private DataOutputStream _out;
-
     public Server(int port) {
         setPort(port);
         setSocket();
     }
-
     public int getPort(){
         return this._port;
     }
@@ -36,46 +31,22 @@ public class Server {
             System.out.println(err.getMessage());
         }
     }
-    public void setInputStream(){
+    public void runServer( ){
         try {
-            this._in = new DataInputStream(this._socket.getInputStream());
-        }catch(IOException err){
-            System.out.println(err.getMessage());
-        }
-    }
-    public void setOutputStream(){
-        try {
-            this._out = new DataOutputStream(this._socket.getOutputStream());
-        }catch(IOException err){
-            System.out.println(err.getMessage());
-        }
-    }
-    public void acceptServer( ){
-        try {
-            this._socket = this._sSocket.accept();
-            System.out.println("Somebody is here...");
-        }catch(IOException err){
-            System.out.println(err.getMessage());
-        }
-    }
-    public void startServer(){
-        this.acceptServer();
-        this.setInputStream();
-        String lineFromClient;
-        try {
-            while ((lineFromClient = this._in.readUTF()) != null){
-                    System.out.println("Client: " + lineFromClient);
+            while (true) {
+                Socket socket = this._sSocket.accept();
+                System.out.println("Somebody is here...");
+                new ServerThread (socket);
             }
-        }catch(IOException err) {
+        }catch(IOException err){
             System.out.println(err.getMessage());
         }
-        System.out.println("Somebody IS GONE!");
-        this.startServer();
     }
+
 
     public static void main(String[] args){
         System.out.println("kek");
         Server server = new Server(1734);
-        server.startServer();
+        server.runServer();
     }
 }

@@ -63,6 +63,7 @@ public class Client {
     public void startClient(){
         this.setSocket();
         this.setOutputStream();
+        this.setInputStream();
         this.set_keyboard();
         System.out.println("Server address:" + this.getAddress() + " port: " + this._serverPort);
         String line = null;
@@ -76,6 +77,8 @@ public class Client {
                 System.out.println("Sending...");
                 this._out.writeUTF(line);
                 this._out.flush();
+                line = _in.readUTF();
+                System.out.println("You: " + line);
             }
         }catch (IOException err){
             System.out.println(err.getMessage());
