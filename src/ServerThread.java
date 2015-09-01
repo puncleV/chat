@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Created by dart on 01.09.15.
  */
-public class ServerThread extends Thread{
+class ServerThread extends Thread{
     protected Socket _socket;
     protected DataInputStream _in;
     protected DataOutputStream _out;
@@ -24,29 +24,18 @@ public class ServerThread extends Thread{
             System.out.println(err.getMessage());
         }
     }
-    public void setOutputStream(){
-        try {
-            this._out = new DataOutputStream(this._socket.getOutputStream());
-        }catch(IOException err){
-            System.out.println(err.getMessage());
-        }
-    }
-    public void setSocketList( ArrayList<Socket>  socketList ){
-        this._socketList = socketList;
-    }
     public void run(){
         this.setInputStream();
-        //this.setOutputStream();
         String lineFromClient;
         try {
             while ((lineFromClient = this._in.readUTF()) != null){
                 System.out.println(lineFromClient);
-                for (int i = 0; i < this._socketList.size(); i++){
+                for (Socket a_socketList : this._socketList) {
                     try {
-                        this._out = new DataOutputStream(this._socketList.get(i).getOutputStream());
+                        this._out = new DataOutputStream(a_socketList.getOutputStream());
                         this._out.writeUTF(lineFromClient);
                         this._out.flush();
-                    }catch(IOException err){
+                    } catch (IOException err) {
                         System.out.println(err.getMessage());
                     }
                 }

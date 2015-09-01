@@ -5,7 +5,7 @@ import java.net.Socket;
 /**
  * Created by dart on 01.09.15.
  */
-public class Client {
+class Client {
     private int _serverPort;
     private InetAddress _serverAddress;
     private Socket _socket;
@@ -58,14 +58,14 @@ public class Client {
         this.setOutputStream();
         this.setKeyboard();
         System.out.println("Server address:" + this.getAddress() + " port: " + this._serverPort);
-        String line = null;
+        String line;
         try {
             System.out.println("Type something");
             new ClientThread(_socket);
             while (true) {
                 line = _keyboard.readLine();
                 if(line.equalsIgnoreCase("exit")){
-                    break;
+                    System.exit(0);
                 }
                 this._out.writeUTF(this._name + ": " + line);
                 this._out.flush();
@@ -75,7 +75,7 @@ public class Client {
         }
     }
     public static void main(String[] args){
-        Client client = new Client(1734,"127.0.0.1");
+        Client client = new Client(1734, "127.0.0.1");
         client.setName( args[0] );
         client.startClient();
     }

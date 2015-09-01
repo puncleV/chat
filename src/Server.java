@@ -6,23 +6,16 @@ import java.util.ArrayList;
 /**
  * Created by dart on 01.09.15.
  */
-public class Server{
+class Server{
     private int _port;
     private ServerSocket _sSocket;
-    private ArrayList<Socket> _socketList;
     public Server(int port) {
         setPort(port);
         setSocket();
     }
-    public int getPort(){
-        return this._port;
-    }
     public void setPort(int port){
         this._port = port;
         System.out.println("New server port is: " + port);
-    }
-    public ServerSocket getSocket(){
-        return this._sSocket;
     }
     public void setSocket(){
         try{
@@ -32,16 +25,16 @@ public class Server{
         }
     }
     public void runServer( ){
-        _socketList = new ArrayList<Socket>();
-        try {
+        ArrayList<Socket> _socketList = new ArrayList<>();
             while (true) {
-                Socket socket = this._sSocket.accept();
-                _socketList.add(socket);
-                new ServerThread (socket, _socketList);
+                try {
+                    Socket socket = this._sSocket.accept();
+                    _socketList.add(socket);
+                    new ServerThread(socket, _socketList);
+                } catch(IOException err){
+                    System.out.println(err.getMessage());
+                }
             }
-        }catch(IOException err){
-            System.out.println(err.getMessage());
-        }
     }
 
 

@@ -5,7 +5,7 @@ import java.net.Socket;
 /**
  * Created by dart on 01.09.15.
  */
-public class ClientThread extends Thread{
+class ClientThread extends Thread{
     private DataInputStream _in;
     private Socket _socket;
     public ClientThread(Socket socket){
