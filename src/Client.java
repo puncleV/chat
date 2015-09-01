@@ -12,12 +12,14 @@ public class Client {
     private DataInputStream _in;
     private DataOutputStream _out;
     private BufferedReader _keyboard;
-
+    private String _name;
     public Client( int port, String address){
         this._serverPort = port;
         this.setAddress(address);
     }
-
+    public void setName(String name){
+        this._name = name;
+    }
     public void setAddress(String address) {
         try {
             this._serverAddress = InetAddress.getByName(address);
@@ -75,7 +77,7 @@ public class Client {
                     break;
                 }
                 System.out.println("Sending...");
-                this._out.writeUTF(line);
+                this._out.writeUTF(this._name + ": " + line);
                 this._out.flush();
                 line = _in.readUTF();
                 System.out.println("You: " + line);
@@ -86,6 +88,7 @@ public class Client {
     }
     public static void main(String[] args){
         Client client = new Client(1734,"127.0.0.1");
+        client.setName( args[0] );
         client.startClient();
     }
 }
